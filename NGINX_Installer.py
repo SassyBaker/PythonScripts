@@ -2,6 +2,15 @@
 import subprocess
 
 
+def execute_command(text_list):
+    for text in text_list:
+        process_output = subprocess.run([text], shell=True)
+        if process_output.returncode != 0:
+            return False
+
+    return True
+
+
 def user_prompt():
     print('What OS should I install it for (q to quit)?')
     print('E.X Debian, Windows, Mac')
@@ -15,7 +24,17 @@ def user_prompt():
 
 
 def debian_installer():
-    process_output = subprocess.run(['sudo apt install curl gnupg2 ca-certificates lsb-release debian-archive-keyring'])
+    commands_list = [
+        'apt install curl gnupg2 ca-certificates lsb-release debian-archive-keyring',
+        'curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null',
+        'gpg --dry-run --quiet --no-keyring --import --import-options import-show /usr/share/keyrings/nginx-archive-keyring.gpg',
+        'echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/debian `lsb_release -cs` nginx" | sudo tee /etc/apt/sources.list.d/nginx.list',
+        'echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | sudo tee /etc/apt/preferences.d/99nginx',
+        'apt update'
+        'apt install nginx'
+    ]
+
+    process_output = execute_command(commands_list)
     print(process_output)
 
 
