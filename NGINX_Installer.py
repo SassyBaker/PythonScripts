@@ -14,7 +14,7 @@ def execute_command(text_list):
 def user_prompt():
     print('What OS should I install it for (q to quit)?')
     print('E.X Debian, Windows, Mac')
-    user_input = input('>> ').lower()
+    user_input = input('>').lower()
 
     if user_input == 'q':
         exit()
