@@ -5,8 +5,8 @@ import subprocess
 def execute_command(text_list):
     for text in text_list:
         process_output = subprocess.run([text], shell=True)
-        if process_output.returncode != 0:
-            return False
+        # if process_output.returncode != 0:
+        #     return False
 
     return True
 
